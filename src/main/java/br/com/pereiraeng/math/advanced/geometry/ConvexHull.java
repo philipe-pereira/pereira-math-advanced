@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import br.com.pereiraeng.math.geometry.Geom;
 import br.com.pereiraeng.core.collections.ListUtils;
+import br.com.pereiraeng.math.geometry.Geom;
 
 /**
  * Classe que contém as funções para o cálculo da envoltória complexa de um

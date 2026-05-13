@@ -1,9 +1,9 @@
 package br.com.pereiraeng.math.advanced.dsp;
 
+import br.com.pereiraeng.core.ExtendedMath;
 import br.com.pereiraeng.math.Complex;
 import br.com.pereiraeng.math.ExtendedMathComplex;
 import br.com.pereiraeng.math.Vec;
-import br.com.pereiraeng.core.ExtendedMath;
 
 /**
  * Classe que representa um filtro linear

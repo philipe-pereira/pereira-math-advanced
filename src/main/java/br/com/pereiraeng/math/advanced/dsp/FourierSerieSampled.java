@@ -1,7 +1,7 @@
 package br.com.pereiraeng.math.advanced.dsp;
 
-import br.com.pereiraeng.math.Complex;
 import br.com.pereiraeng.core.ExtendedMath;
+import br.com.pereiraeng.math.Complex;
 
 /**
  * Classe do objeto que representa uma série de dados amostrados sobre o qual

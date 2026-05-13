@@ -12,6 +12,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 
+import br.com.pereiraeng.core.ExtendedMath;
+import br.com.pereiraeng.core.collections.sortedlist.SortedList;
 import br.com.pereiraeng.graph.tree.BinaryNode;
 import br.com.pereiraeng.math.DuplaO;
 import br.com.pereiraeng.math.Vec;
@@ -19,8 +21,6 @@ import br.com.pereiraeng.math.geometry.Circle;
 import br.com.pereiraeng.math.geometry.Geom;
 import br.com.pereiraeng.math.geometry.Line;
 import br.com.pereiraeng.math.geometry.Polygon;
-import br.com.pereiraeng.core.ExtendedMath;
-import br.com.pereiraeng.core.collections.sortedlist.SortedList;
 
 public class Voronoi {
 

@@ -25,15 +25,15 @@ public class HrmHandler<K> extends EstHandler<K> {
 		this.offset = offset;
 		this.scale = scale;
 	}
-	
+
 	public Map<K, FourierSerie[]> getSeries() {
 		return series;
 	}
-	
+
 	public double getScale() {
 		return scale;
 	}
-	
+
 	public double getOffset() {
 		return offset;
 	}

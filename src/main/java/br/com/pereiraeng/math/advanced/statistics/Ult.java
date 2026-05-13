@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import br.com.pereiraeng.core.TimeUtils;
 import br.com.pereiraeng.math.timeseries.Reg;
 import br.com.pereiraeng.math.timeseries.unit.Med;
-import br.com.pereiraeng.core.TimeUtils;
 
 /**
  * Classe do objeto que traz as informações sobre as ultrapassagens em um dado

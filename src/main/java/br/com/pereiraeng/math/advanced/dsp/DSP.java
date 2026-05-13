@@ -2,15 +2,14 @@ package br.com.pereiraeng.math.advanced.dsp;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
-import br.com.pereiraeng.math.Spline;
-import br.com.pereiraeng.math.probability.ProbEstat;
-import br.com.pereiraeng.math.timeseries.SrT;
 import br.com.pereiraeng.core.ExtendedMath;
 import br.com.pereiraeng.core.ReflectionUtils;
 import br.com.pereiraeng.core.collections.ArrayUtils;
-
-import java.util.TreeMap;
+import br.com.pereiraeng.math.Spline;
+import br.com.pereiraeng.math.probability.ProbEstat;
+import br.com.pereiraeng.math.timeseries.SrT;
 
 /**
  * Classe das funções de processamento digital de sinais
@@ -48,12 +47,12 @@ public class DSP {
 		TreeMap<T, Float> out = new TreeMap<>();
 
 		Iterator<Entry<T, float[]>> it = srt.entrySet().iterator();
-		Entry<T, float[]> e = it.next();
+		Entry<T, float[]> entry = it.next();
 
-		T lastTime = e.getKey();
-		float lastValue = e.getValue()[pos];
+		T lastTime = entry.getKey();
+		float lastValue = entry.getValue()[pos];
 
-		boolean s0 = lastValue > 0;
+		boolean previousSign = lastValue > 0;
 		T lastZero = null;
 
 		double[][] buffer = null;
@@ -65,18 +64,19 @@ public class DSP {
 
 		int c = 1;
 		while (it.hasNext()) {
-			e = it.next();
+			entry = it.next();
 
-			T t = e.getKey();
-			float v = e.getValue()[pos];
+			T time = entry.getKey();
+			float value = entry.getValue()[pos];
 
-			boolean si = v > 0;
-			double z = Double.NaN;
+			boolean sign = value > 0;
+			double timeAtZeroCrossing = Double.NaN;
 
 			if (DSP.ZERO_LINE) {
 				// aproximar por uma reta
-				if (si ^ s0)
-					z = ExtendedMath.getZero(lastTime.doubleValue(), t.doubleValue(), lastValue, v);
+				if (sign ^ previousSign)
+					timeAtZeroCrossing = ExtendedMath.getZero(lastTime.doubleValue(), time.doubleValue(), lastValue,
+							value);
 			} else {
 				// aproximar por um spline
 
@@ -84,8 +84,8 @@ public class DSP {
 
 				ArrayUtils.shiftedArray(buffer[0], -1);
 				ArrayUtils.shiftedArray(buffer[1], -1);
-				buffer[0][DSP.SPLINE_POINTS - 1] = t.doubleValue();
-				buffer[1][DSP.SPLINE_POINTS - 1] = v;
+				buffer[0][DSP.SPLINE_POINTS - 1] = time.doubleValue();
+				buffer[1][DSP.SPLINE_POINTS - 1] = value;
 				if (c > 0) {
 					// enchendo
 					c++;
@@ -93,7 +93,7 @@ public class DSP {
 						c = 0;
 				} else if (c == 0) {
 					// cheio, esperando zero
-					if (si ^ s0)
+					if (sign ^ previousSign)
 						c = -1;
 				} else if (c < 0) {
 					// cheio, achou o zero
@@ -102,27 +102,27 @@ public class DSP {
 					if (-c == DSP.SPLINE_POINTS / 2) {
 						// zero pronto para ser calculado
 						double[] m = Spline.getSpline(buffer[0], buffer[1]);
-						z = Spline.solve(buffer[0], buffer[1], m, /* POINTS / 2 */0);
+						timeAtZeroCrossing = Spline.solve(buffer[0], buffer[1], m, /* POINTS / 2 */0);
 						c = 0;
 					}
 				}
 			}
 
-			if (!Double.isNaN(z)) {
+			if (!Double.isNaN(timeAtZeroCrossing)) {
 				// achou um novo zero!
-				T newZero = ReflectionUtils.double2number(t, z);
+				T newZero = ReflectionUtils.double2number(time, timeAtZeroCrossing);
 				if (lastZero != null) {
 					double f = .5 / ((newZero.doubleValue() - lastZero.doubleValue()) * timeFactor);
-					T tf = ReflectionUtils.double2number(t, (newZero.doubleValue() + lastZero.doubleValue()) * .5);
+					T tf = ReflectionUtils.double2number(time, (newZero.doubleValue() + lastZero.doubleValue()) * .5);
 					out.put(tf, (float) f);
 				}
 
-				s0 = si;
+				previousSign = sign;
 				lastZero = newZero;
 			}
 
-			lastTime = t;
-			lastValue = v;
+			lastTime = time;
+			lastValue = value;
 		}
 
 		// TODO filtro passa baixa...

@@ -1,7 +1,7 @@
 package br.com.pereiraeng.math.advanced.statistics;
 
-import br.com.pereiraeng.math.probability.ProbEstat;
 import br.com.pereiraeng.math.advanced.dsp.PairFourierSerie;
+import br.com.pereiraeng.math.probability.ProbEstat;
 
 public class Prf implements Sta {
 
